@@ -2135,3 +2135,4 @@
 {"ts":1793215380040,"line":"MOTİF KEŞFEDİLDİ: WALL_SPAWN:ask→BOOK_TILT:ask→WALL_TEST:ask→BOOK_TILT:bid (pencere içinde 3 görülme)"}
 {"ts":1793215872536,"line":"MOTİF KEŞFEDİLDİ: BOOK_TILT:ask→BOOK_TILT:bid→MICRO_FLIP:ask (pencere içinde 3 görülme)"}
 {"ts":1793216094498,"line":"MOTİF KEŞFEDİLDİ: WALL_SPAWN:bid→BOOK_TILT:ask→BOOK_TILT:ask (pencere içinde 3 görülme)"}
+{"ts":1793216241809,"line":"MOTİF KEŞFEDİLDİ: WALL_HOLD:ask→BOOK_TILT:bid (pencere içinde 3 görülme)"}

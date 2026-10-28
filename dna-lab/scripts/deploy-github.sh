@@ -11,7 +11,10 @@
 # ============================================================================
 set -euo pipefail
 
-REPO_DIR="$(git -C "$(cd "$(dirname "$0")" && pwd)" rev-parse --show-toplevel 2>/dev/null || cd "$(dirname "$0")/.." && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || true)"
+[ -n "$REPO_DIR" ] || REPO_DIR="$SCRIPT_DIR/.."
+REPO_DIR="$(cd "$REPO_DIR" && pwd)"
 # Token öncelik sırası: GITHUB_TOKEN env → $1 (token formatlıysa, sonra shift edilir)
 TOKEN="${GITHUB_TOKEN:-}"
 if [ -z "$TOKEN" ] && [[ "${1:-}" =~ ^(ghp_|github_pat_|gho_) ]]; then TOKEN="$1"; shift; fi
