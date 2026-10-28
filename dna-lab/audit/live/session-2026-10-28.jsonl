@@ -2133,3 +2133,4 @@
 {"ts":1793215306220,"line":"MOTİF KEŞFEDİLDİ: BOOK_TILT:ask→BOOK_TILT:bid→FLOW_BURST:buy (pencere içinde 3 görülme)"}
 {"ts":1793215334724,"line":"MOTİF KEŞFEDİLDİ: VOID_OPEN:bid→BOOK_TILT:ask→BOOK_TILT:bid→MICRO_FLIP:bid (pencere içinde 3 görülme)"}
 {"ts":1793215380040,"line":"MOTİF KEŞFEDİLDİ: WALL_SPAWN:ask→BOOK_TILT:ask→WALL_TEST:ask→BOOK_TILT:bid (pencere içinde 3 görülme)"}
+{"ts":1793215872536,"line":"MOTİF KEŞFEDİLDİ: BOOK_TILT:ask→BOOK_TILT:bid→MICRO_FLIP:ask (pencere içinde 3 görülme)"}
