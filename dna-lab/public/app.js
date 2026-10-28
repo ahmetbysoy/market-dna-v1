@@ -2,6 +2,15 @@
 /* Market DNA V1 — panel istemcisi. Yalnızca gerçek sistem durumu ve sonuçları gösterir. */
 (() => {
   const $ = (id) => document.getElementById(id);
+  /**
+   * API tabanı — ayrık barındırma desteği (örn. panel Vercel statik, backend Railway/Fly).
+   * Öncelik: ?api=https://... URL parametresi (kalıcı localStorage'a yazılır) → localStorage.dnaApiBase → aynı origin.
+   */
+  const API_BASE = (() => {
+    const q = new URLSearchParams(location.search).get('api');
+    if (q) { try { localStorage.setItem('dnaApiBase', q.replace(/\/+$/, '')); } catch (_) {} }
+    try { return (q || localStorage.getItem('dnaApiBase') || '').replace(/\/+$/, ''); } catch (_) { return (q || '').replace(/\/+$/, ''); }
+  })();
   const state = {
     view: 'market',
     last: null,       // son /api/state snapshot
@@ -41,7 +50,7 @@
   /* ---------------- SSE ---------------- */
   function connectSSE() {
     if (state.es) state.es.close();
-    const es = new EventSource('/api/stream');
+    const es = new EventSource(API_BASE + '/api/stream');
     state.es = es;
     es.addEventListener('state', (e) => { const m = JSON.parse(e.data); state.last = m.data; render(); });
     es.addEventListener('dnaEvent', (e) => {
@@ -83,7 +92,7 @@
   /* ---------------- coin seçimi ---------------- */
   async function loadCoins() {
     try {
-      const r = await fetch('/api/coins');
+      const r = await fetch(API_BASE + '/api/coins');
       const j = await r.json();
       const wrap = $('coinChoices');
       wrap.innerHTML = '';
@@ -100,7 +109,7 @@
     sym = (sym || '').toUpperCase().trim();
     if (!sym) return;
     try {
-      const r = await fetch('/api/coin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ symbol: sym }) });
+      const r = await fetch(API_BASE + '/api/coin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ symbol: sym }) });
       const j = await r.json();
       if (j.error) return alert('Hata: ' + j.error);
       state.selectedCoin = sym;
@@ -120,14 +129,14 @@
   $('bgToggle').addEventListener('click', async () => {
     const next = !(state.background === true);
     try {
-      await fetch('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ background: next }) });
+      await fetch(API_BASE + '/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ background: next }) });
       state.background = next;
       renderSettings();
     } catch (_) {}
   });
   $('endSessionBtn').addEventListener('click', async () => {
     try {
-      await fetch('/api/session/end', { method: 'POST' });
+      await fetch(API_BASE + '/api/session/end', { method: 'POST' });
     } catch (_) {}
   });
 
@@ -330,7 +339,7 @@
     $('memoryTitle').textContent = sym ? `${sym} kalıcı hafıza` : 'Kalıcı öğrenme';
     if (!sym) { grid.innerHTML = '<div class="empty-line">Oturum açılınca hafıza durumu görünür.</div>'; $('memFiles').innerHTML = ''; return; }
     try {
-      const r = await fetch('/api/memory/' + sym);
+      const r = await fetch(API_BASE + '/api/memory/' + sym);
       const j = await r.json();
       const st = j.state || {};
       const c = st.counters || {};
@@ -370,7 +379,7 @@
   /* ---------------- başlangıç ---------------- */
   async function init() {
     try {
-      const r = await fetch('/api/state');
+      const r = await fetch(API_BASE + '/api/state');
       state.last = await r.json();
       if (state.last.session && state.last.session.symbol) state.selectedCoin = state.last.session.symbol;
     } catch (_) {}

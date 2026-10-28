@@ -11,6 +11,15 @@ const config = require('../config');
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png' };
 
+/**
+ * CORS — ayrık barındırma için (örn. panel Vercel'de statik, backend Railway/Fly'da).
+ * DNA_ALLOW_ORIGIN ile belirli origin'e kısıtlanır; varsayılan '*' (salt-okur panel, yetkisiz yazma yok).
+ */
+const ALLOW_ORIGIN = process.env.DNA_ALLOW_ORIGIN || '*';
+function corsHeaders(extra = {}) {
+  return { 'Access-Control-Allow-Origin': ALLOW_ORIGIN, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', ...extra };
+}
+
 function createServer(session, opts = {}) {
   const clients = new Set();   // SSE response'ları
 
@@ -25,13 +34,18 @@ function createServer(session, opts = {}) {
     const u = new URL(req.url, 'http://localhost');
     const p = u.pathname;
 
+    if (req.method === 'OPTIONS') {   // CORS preflight (ayrık barındırma POST'ları için)
+      res.writeHead(204, corsHeaders({ 'Access-Control-Max-Age': '86400' }));
+      return res.end();
+    }
+
     if (p === '/api/stream') {
-      res.writeHead(200, {
+      res.writeHead(200, corsHeaders({
         'Content-Type': 'text/event-stream; charset=utf-8',
         'Cache-Control': 'no-cache, no-transform',
         Connection: 'keep-alive',
         'X-Accel-Buffering': 'no',
-      });
+      }));
       res.write(`event: hello\ndata: ${JSON.stringify({ hello: 'market-dna', ts: Date.now() })}\n\n`);
       res.write(`event: state\ndata: ${JSON.stringify({ channel: 'state', data: session.publicSnapshot(), ts: Date.now() })}\n\n`);
       clients.add(res);
@@ -102,7 +116,7 @@ function createServer(session, opts = {}) {
 
   function json(res, obj, code = 200) {
     const data = JSON.stringify(obj);
-    res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.writeHead(code, corsHeaders({ 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }));
     res.end(data);
   }
 

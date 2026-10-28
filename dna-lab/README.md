@@ -15,6 +15,21 @@ node server.js          # Node >= 22 — SIFIR npm bağımlılığı
 - Frontend: `public/` (mobil öncelikli, saf HTML/CSS/JS; yalnızca gerçek sistem durumunu gösterir).
 - `orderbook-mobile (5).html` yön motoruna dokunulmadı; Market DNA bağımsız motordur.
 
+## Dağıtım (Vercel dahil gerçeği)
+
+**Vercel bu sistemin BACKEND'İNİ ÇALIŞTIRAMAZ.** Market DNA kalıcı bir süreçtir: Binance WebSocket akışlarına saatlerce bağlı kalır, `listen()` ile port tutar, SSE ile push yapar. Vercel serverless'tır: fonksiyon başına saniyeler sınırı, kalıcı süreç yok, kalıcı WebSocket yok. Bu mimari kısımdır, kod hatası değildir.
+
+| Hedef | Çözüm |
+|---|---|
+| **Tam sistem** (backend + panel) | Railway / Render / Fly.io / VPS / Docker — repo `dna-lab/` klasörü, start: `node server.js`, health: `/health` |
+| **Yalnız statik panel** (Vercel) | Repo kökündeki `vercel.json` paneli yayımlar; `?api=https://BACKEND-URL` ile uzak backend'e bağlanır (CORS desteği eklendi, `DNA_ALLOW_ORIGIN` ile kısıtlanabilir) |
+| **Her yerde çalışır konteyner** | `dna-lab/Dockerfile` (node:22-alpine, health-check'li) |
+
+- Railway: yeni proje → GitHub repo → Settings → **Root Directory = `dna-lab`** → otomatik `railway.json`.
+- Render: repo kökündeki `render.yaml` (`rootDir: dna-lab`) → free plan 15 dk boşta uyur, kalıcı oturum için ücretli plan.
+- Fly.io: `cd dna-lab && fly launch`; `fly.toml` auto_stop KAPALI (WS akışı kesintisiz olmalı).
+- **Kalıcı hafıza:** PaaS diskleri geçicidir — `data/` için volume bağlayın (Fly: `fly volumes create dna-data --size 1`, mount `/app/data`); yoksa her yeniden dağıtımda öğrenme sıfırlanır.
+
 ## Mimari
 
 ```

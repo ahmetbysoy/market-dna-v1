@@ -23,9 +23,20 @@ const { CoinMemory, fnv1a } = require('../src/memory/coin-memory');
 const config = require('../src/config');
 let pass = 0, fail = 0;
 const failures = [];
+const pending = [];
 
 function test(name, fn) {
-  try { fn(); pass += 1; console.log(`  PASS ${name}`); }
+  try {
+    const out = fn();
+    if (out && typeof out.then === 'function') {   // async test desteği (CORS/HTTP entegrasyonu)
+      pending.push(
+        out.then(() => { pass += 1; console.log(`  PASS ${name}`); },
+                 (e) => { fail += 1; failures.push({ name, e: e && e.message || String(e) }); console.log(`  FAIL ${name}\n       ${e && e.message || e}`); })
+      );
+      return;
+    }
+    pass += 1; console.log(`  PASS ${name}`);
+  }
   catch (e) { fail += 1; failures.push({ name, e: e.message }); console.log(`  FAIL ${name}\n       ${e.message}`); }
 }
 
@@ -487,8 +498,35 @@ test('rotateJsonlIfNeeded: sınır altındaki dosyaya dokunmaz', () => {
   }
 });
 
+test('api/server: CORS preflight (OPTIONS) + json CORS başlığı — ayrık barındırma desteği', async () => {
+  const { createServer } = require('../src/api/server');
+  const stubSession = {
+    publicSnapshot: () => ({ phase: 'idle', session: { symbol: null } }),
+    clientConnected() {}, clientDisconnected() {}, broadcast: null,
+    phase: 'idle', background: false, active: null, lastSymbol: null,
+  };
+  const { server } = createServer(stubSession);
+  await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const port = server.address().port;
+  try {
+    const pre = await fetch(`http://127.0.0.1:${port}/api/coin`, { method: 'OPTIONS' });
+    assert.strictEqual(pre.status, 204, `preflight status=${pre.status}`);
+    assert.strictEqual(pre.headers.get('access-control-allow-origin'), '*', 'preflight CORS origin');
+    assert.ok((pre.headers.get('access-control-allow-methods') || '').includes('POST'), 'preflight methods');
+    const st = await fetch(`http://127.0.0.1:${port}/api/state`);
+    assert.strictEqual(st.status, 200);
+    assert.strictEqual(st.headers.get('access-control-allow-origin'), '*', 'json CORS origin');
+    const body = await st.json();
+    assert.ok('phase' in body, 'state gövdesi');
+  } finally {
+    await new Promise((r) => server.close(r));
+  }
+});
+
 /* ---------- sonuc ---------- */
-console.log(`\n=== BİRİM TEST SONUCU: ${pass} PASS, ${fail} FAIL ===`);
-if (failures.length) { for (const f of failures) console.log(`  ✗ ${f.name}: ${f.e}`); }
-console.log('NOT: Bu testler deterministik sentetik girdilerle çalıştırıldı — canlı piyasa kanıtı DEĞİLDİR.');
-process.exit(fail ? 1 : 0);
+Promise.all(pending).then(() => {
+  console.log(`\n=== BİRİM TEST SONUCU: ${pass} PASS, ${fail} FAIL ===`);
+  if (failures.length) { for (const f of failures) console.log(`  ✗ ${f.name}: ${f.e}`); }
+  console.log('NOT: Bu testler deterministik sentetik girdilerle çalıştırıldı — canlı piyasa kanıtı DEĞİLDİR.');
+  process.exit(fail ? 1 : 0);
+}).catch((e) => { console.error('test koşucu hatası:', e); process.exit(1); });

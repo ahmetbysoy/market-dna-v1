@@ -1,0 +1,14 @@
+# Render.com — repo kökünden otomatik algılanır (rootDir: dna-lab).
+# NOT: Ücretsiz plan 15 dk boşta der uyur (WebSocket inkübasyonu kopar) — kalıcı süreç için ücretli plan + disk gerekir.
+services:
+  - type: web
+    name: market-dna
+    runtime: node
+    rootDir: dna-lab
+    startCommand: node server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DNA_JSONL_MAX_BYTES
+        value: "33554432"

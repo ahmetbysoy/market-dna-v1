@@ -1,0 +1,17 @@
+# Fly.io — kalıcı süreç gereksinimi: auto_stop KAPALI (Binance WebSocket akışı kesintisiz olmalı).
+# Kurulum: cd dna-lab && fly launch --no-deploy && fly volumes create dna-data --size 1 && fly deploy
+# Kalıcı hafıza (data/) için volume mount ZORUNLU — yoksa her deploy'da öğrenme sıfırlanır.
+app = "market-dna"
+primary_region = "fra"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    path = "/health"
