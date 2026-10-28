@@ -423,6 +423,70 @@ test('ece: mükemmel kalibrasyonda 0', () => {
   assert.ok(e < 0.05, `ece=${e}`);
 });
 
+/* ---------- 11. JSONL boyut rotasyonu (GitHub 100 MB limiti karşı önlemi) ---------- */
+console.log('\n[jsonl-rotasyon]');
+test('appendJsonl: boyut sınırında .part.jsonl.gz arşivi oluşturur, veri kayıpsız ve aktif dosya devam eder', () => {
+  const zlib = require('zlib');
+  const { appendJsonl, rotateJsonlIfNeeded } = require('../src/util');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dna-rot-'));
+  const f = path.join(dir, 'episodes-test.jsonl');
+  process.env.DNA_JSONL_MAX_BYTES = '1024';
+  try {
+    for (let i = 0; i < 50; i++) appendJsonl(f, { i, pad: 'X'.repeat(100) }); // ~5 KB > 1 KB sınır
+    const files = fs.readdirSync(dir);
+    const gzFiles = files.filter((x) => x.endsWith('.part.jsonl.gz'));
+    assert.ok(gzFiles.length >= 1, `arşiv yok: ${files.join(',')}`);
+    assert.ok(fs.existsSync(f), 'rotasyon sonrası aktif dosya devam etmeli');
+    // Arşiv adlandırması loadRecentEpisodes filtresiyle uyumlu olmalı
+    assert.ok(gzFiles.every((x) => x.startsWith('episodes-') && x.endsWith('.jsonl.gz')), `ad uyumsuz: ${gzFiles.join(',')}`);
+    // Kayıpsızlık: arşiv + aktif toplam satır = 50, sıra korunur
+    const archLines = gzFiles.sort()
+      .flatMap((x) => zlib.gunzipSync(fs.readFileSync(path.join(dir, x))).toString('utf8').split('\n').filter(Boolean));
+    const activeLines = fs.readFileSync(f, 'utf8').split('\n').filter(Boolean);
+    assert.strictEqual(archLines.length + activeLines.length, 50, `arşiv=${archLines.length} aktif=${activeLines.length}`);
+    assert.strictEqual(JSON.parse(archLines[0]).i, 0, 'ilk satır arşivde olmalı');
+    assert.strictEqual(JSON.parse(activeLines[activeLines.length - 1]).i, 49, 'son satır aktif dosyada olmalı');
+    // loadRecentEpisodes .gz parçalarını okuyabilmeli (entegrasyon — gerçek adlandırma düzeniyle)
+    const { CoinMemory } = require('../src/memory/coin-memory');
+    const base = fs.mkdtempSync(path.join(os.tmpdir(), 'dna-rot-mem-'));
+    const mem = new CoinMemory('TESTUSDT', base); // dir = base/memory/TESTUSDT
+    fs.mkdirSync(mem.dir, { recursive: true });
+    const now = Date.now();
+    fs.writeFileSync(path.join(mem.dir, 'state.json'), '{}');
+    fs.writeFileSync(
+      path.join(mem.dir, 'episodes-' + new Date(now).toISOString().slice(0, 10) + '.part.jsonl.gz'),
+      zlib.gzipSync(Buffer.from(JSON.stringify({ epId: 'gz-1', t0: now, horizons: {} }) + '\n'))
+    );
+    fs.writeFileSync(
+      path.join(mem.dir, 'episodes-' + new Date(now).toISOString().slice(0, 10) + '.jsonl'),
+      JSON.stringify({ epId: 'live-1', t0: now, horizons: {} }) + '\n'
+    );
+    const eps = mem.loadRecentEpisodes();
+    assert.ok(eps.some((e) => e.epId === 'gz-1'), '.gz arşivden episod okunamadı');
+    assert.ok(eps.some((e) => e.epId === 'live-1'), 'aktif dosyadan episod okunamadı');
+    fs.rmSync(base, { recursive: true, force: true });
+    delete process.env.DNA_JSONL_MAX_BYTES;
+  } finally {
+    delete process.env.DNA_JSONL_MAX_BYTES;
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('rotateJsonlIfNeeded: sınır altındaki dosyaya dokunmaz', () => {
+  const { rotateJsonlIfNeeded } = require('../src/util');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dna-rot2-'));
+  const f = path.join(dir, 'events-test.jsonl');
+  process.env.DNA_JSONL_MAX_BYTES = String(1024 * 1024);
+  try {
+    fs.writeFileSync(f, 'small line\n');
+    assert.strictEqual(rotateJsonlIfNeeded(f), null, 'sınır altında rotasyon olmamalı');
+    assert.ok(fs.existsSync(f) && !fs.readdirSync(dir).some((x) => x.endsWith('.gz')), 'dosya değişmemeli');
+  } finally {
+    delete process.env.DNA_JSONL_MAX_BYTES;
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 /* ---------- sonuc ---------- */
 console.log(`\n=== BİRİM TEST SONUCU: ${pass} PASS, ${fail} FAIL ===`);
 if (failures.length) { for (const f of failures) console.log(`  ✗ ${f.name}: ${f.e}`); }

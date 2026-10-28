@@ -11,7 +11,7 @@ node server.js          # Node >= 22 — SIFIR npm bağımlılığı
 # Panel: http://localhost:3000
 ```
 
-- Backend: `server.js` + `src/` (WebSocket kaynak yönetimi, olay kodlama, motif keşfi, öğrenme, kalıcı hafıza — hepsi sunucuda).
+- Backend: `server.js` + `src/` (WebSocket kaynak yönetimi, olay kodlama, motif keşfi, öğrenme, kalıcı hafıza — hepsi sunucuda). REST: `/api/state|coins|settings|memory/<COIN>|audit` + SSE: `/api/stream` (node:http, bağımlılıksız).
 - Frontend: `public/` (mobil öncelikli, saf HTML/CSS/JS; yalnızca gerçek sistem durumunu gösterir).
 - `orderbook-mobile (5).html` yön motoruna dokunulmadı; Market DNA bağımsız motordur.
 

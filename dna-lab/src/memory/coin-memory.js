@@ -131,15 +131,21 @@ class CoinMemory {
     this.state.baseScores = baseSnapshot;
   }
 
-  /** Hafızadaki çözülmüş episodları baz model havuzu için geri ver (yalnız son N gün, epId tekilleştirilmiş). */
+  /** Hafızadaki çözülmüş episodları baz model havuzu için geri ver (yalnız son N gün, epId tekilleştirilmiş).
+   *  Boyut rotasyonuyla arşivlenen .jsonl.gz parçaları da okunur (kayıpsız geri yükleme). */
   loadRecentEpisodes(maxAgeMs = 6 * 3600 * 1000) {
     const out = [];
     const seen = new Set();
     try {
-      const files = fs.readdirSync(this.dir).filter((f) => f.startsWith('episodes-') && f.endsWith('.jsonl')).sort();
+      const files = fs.readdirSync(this.dir)
+        .filter((f) => f.startsWith('episodes-') && (f.endsWith('.jsonl') || f.endsWith('.jsonl.gz')))
+        .sort();
       const cutoff = Date.now() - maxAgeMs;
-      for (const f of files.slice(-3)) {   // son 3 gün dosyası yeterli
-        const lines = fs.readFileSync(path.join(this.dir, f), 'utf8').split('\n').filter(Boolean);
+      for (const f of files.slice(-4)) {   // aktif + en fazla 3 arşiv parçası
+        let raw;
+        if (f.endsWith('.gz')) raw = require('zlib').gunzipSync(fs.readFileSync(path.join(this.dir, f))).toString('utf8');
+        else raw = fs.readFileSync(path.join(this.dir, f), 'utf8');
+        const lines = raw.split('\n').filter(Boolean);
         for (const line of lines) {
           try {
             const ep = JSON.parse(line);

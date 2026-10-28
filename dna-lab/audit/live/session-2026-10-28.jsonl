@@ -2136,3 +2136,10 @@
 {"ts":1793215872536,"line":"MOTİF KEŞFEDİLDİ: BOOK_TILT:ask→BOOK_TILT:bid→MICRO_FLIP:ask (pencere içinde 3 görülme)"}
 {"ts":1793216094498,"line":"MOTİF KEŞFEDİLDİ: WALL_SPAWN:bid→BOOK_TILT:ask→BOOK_TILT:ask (pencere içinde 3 görülme)"}
 {"ts":1793216241809,"line":"MOTİF KEŞFEDİLDİ: WALL_HOLD:ask→BOOK_TILT:bid (pencere içinde 3 görülme)"}
+{"ts":1793216280014,"line":"MOTİF KEŞFEDİLDİ: BOOK_TILT:ask→BOOK_TILT:bid→BOOK_TILT:bid→BOOK_TILT:bid (pencere içinde 3 görülme)"}
+{"ts":1793216436578,"line":"MOTİF KEŞFEDİLDİ: BOOK_TILT:bid→VOID_OPEN:bid→BOOK_TILT:ask→BOOK_TILT:bid (pencere içinde 3 görülme)"}
+{"ts":1793216480080,"line":"MOTİF KEŞFEDİLDİ: WALL_PULL:ask→BOOK_TILT:ask (pencere içinde 3 görülme)"}
+{"ts":1793216508336,"line":"MOTİF KEŞFEDİLDİ: FLOW_BURST:sell→WALL_SPAWN:ask (pencere içinde 3 görülme)"}
+{"ts":1793216508336,"line":"MOTİF KEŞFEDİLDİ: VOID_OPEN:ask→BOOK_TILT:ask→VOID_OPEN:bid (pencere içinde 3 görülme)"}
+{"ts":1793216526777,"line":"MOTİF KEŞFEDİLDİ: WALL_SPAWN:ask→BOOK_TILT:bid→WALL_TEST:ask→BOOK_TILT:ask (pencere içinde 3 görülme)"}
+{"ts":1793216539763,"line":"OTURUM KAPATILDI: BTCUSDT — neden: kapatma"}

@@ -44,11 +44,44 @@ function atomicWriteJson(filePath, obj) {
   fs.renameSync(tmp, filePath);
 }
 
-/** JSONL satırı ekleme (append). */
+/** JSONL dosyası boyut sınırını aşarsa kayıpsız arşivle (.jsonl.gz).
+ * - Günlük JSONL rotasyonuna ek boyut koruması: GitHub 100 MB blob limiti
+ *   ve disk şişmesi karşı önlem (FAZ 8 dersleri).
+ * - appendFileSync her yazıda aç/kapat yaptığı için rotasyon sırasındaki
+ *   eşzamanlı append yeni dosyayı oluşturur — veri kaybı/bozulma YOK.
+ * - Aynı milisaniyedeki ardışık rotasyonlar arşiv adı çakışmasıyla EZİLMEMELİDİR;
+ *   monotonik sayaç (rotSeq) adları benzersiz yapar (birim testi bu hatayı yakaladı).
+ * - Sınır ortam değişkeniyle aşılabilitir (test edilebilirlik için tembel okuma).
+ */
+let rotSeq = 0;
+function rotateJsonlIfNeeded(filePath) {
+  const fs = require('fs');
+  const path = require('path');
+  const zlib = require('zlib');
+  const maxBytes = Number(process.env.DNA_JSONL_MAX_BYTES || 32 * 1024 * 1024);
+  let st = null;
+  try { st = fs.statSync(filePath); } catch { return null; }
+  if (!st || st.size < maxBytes) return null;
+  const ts = new Date().toISOString().replace(/[:.]/g, '-');
+  rotSeq = (rotSeq + 1) % 1e9;
+  const seq = ('000000' + rotSeq).slice(-7);
+  const base = filePath.replace(/\.jsonl$/, '');
+  const tmp = `${base}.${ts}-${seq}.part.jsonl.rotating`;
+  fs.renameSync(filePath, tmp); // sonraki append'ler yeni dosyayı oluşturur
+  const gzPath = `${base}.${ts}-${seq}.part.jsonl.gz`;
+  const gzTmp = `${gzPath}.tmp.${process.pid}`;
+  fs.writeFileSync(gzTmp, zlib.gzipSync(fs.readFileSync(tmp)));
+  fs.renameSync(gzTmp, gzPath);
+  fs.unlinkSync(tmp);
+  return gzPath;
+}
+
+/** JSONL satırı ekleme (append) + gerekiyorsa boyut bazlı arşivleme. */
 function appendJsonl(filePath, obj) {
   const fs = require('fs');
   const path = require('path');
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  rotateJsonlIfNeeded(filePath);
   fs.appendFileSync(filePath, JSON.stringify(obj) + '\n');
 }
 
@@ -86,4 +119,4 @@ function fmtDur(ms) {
   return `${Math.floor(ms / 60_000)}m${Math.round((ms % 60_000) / 1000)}s`;
 }
 
-module.exports = { nowMs, clamp, median, mean, stdev, ewma, atomicWriteJson, appendJsonl, dayStamp, makeId, bpsOf, notional, sumNotional, fmtDur };
+module.exports = { nowMs, clamp, median, mean, stdev, ewma, atomicWriteJson, appendJsonl, rotateJsonlIfNeeded, dayStamp, makeId, bpsOf, notional, sumNotional, fmtDur };
