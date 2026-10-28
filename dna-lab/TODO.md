@@ -104,3 +104,12 @@
 | 5 | DONE | restart/gap/kurtarma testleri (birebir sayaç eşleşmesi) |
 | 6 | DONE | tarayıcı doğrulaması (5 sekme, 0 konsol hatası) + SSE kanıt |
 | 7 | DONE | audit/live/liveaudit-*.md (uçtan uca gerçek kanıt) |
+
+## FAZ 8 — GitHub Dağıtımı — **BLOCKED (dış bağımlılık: kimlik bilgisi)**
+
+- [x] Yerel depo dağıtıma hazır — main branch, 3 commit, 55 dosya izlemeli; çalışma ağacı temiz (commit `7408368` sonrası).
+- [x] `.env` VCS'ten çıkarıldı + `.gitignore` genişletildi (`.env`, `upload/`, `db/`, `*.log`) — sır sızıntısı riski kapatıldı.
+- [x] `scripts/deploy-github.sh` — tek komut dağıtım: token doğrulama → repo oluşturma (422=zaten var, idempotent) → remote → push → API ile push doğrulama; token maskelenir, git config'e KAYDEDİLMEZ.
+- [x] Ağ doğrulaması — github.com erişilebilir (HTTP/2 200, 2026-10-28); api.github.com anonim istekte rate-limit'li (authenticated istekte sorun beklenmiyor).
+- [ ] **BLOCKED:** Bu ortamda GitHub kimlik bilgisi YOK (env / gh CLI / credential helper / config taramasıyla kanıtlandı — hiçbiri token içermiyor). GitHub push, geçerli bir Personal Access Token (kapsam: `repo` veya Fine-grained `Contents: read & write`) olmadan imkânsızdır ve bu kanıt disiplinine aykırı biçimde SAHTE bir repo URL'si bildirilmesi reddedilmiştir.
+- [ ] Token sağlandığında: `GITHUB_TOKEN=ghp_xxx dna-lab/scripts/deploy-github.sh market-dna-v1 private` → TODO.md bu madde DONE olarak güncellenir.
