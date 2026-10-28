@@ -1,0 +1,141 @@
+{
+  "ts": "2026-10-28T17:53:48.439Z",
+  "symbol": "BTCUSDT",
+  "durationPerWssSec": 12,
+  "wss": [
+    {
+      "name": "binance_futures_public(bookTicker+depth20)",
+      "url": "wss://fstream.binance.com/public/stream?streams=btcusdt@bookTicker/btcusdt@depth20@100ms",
+      "ok": true,
+      "connected": true,
+      "subscribed": false,
+      "connectMs": 221,
+      "firstMsgMs": 256,
+      "durationMs": 12000,
+      "counts": {
+        "<sym>@bookTicker": 4256,
+        "<sym>@depth20@100ms": 115
+      },
+      "total": 4371,
+      "samples": {
+        "<sym>@bookTicker": "{\"stream\":\"btcusdt@bookTicker\",\"data\":{\"e\":\"bookTicker\",\"u\":11948980029611,\"s\":\"BTCUSDT\",\"ps\":\"BTCUSDT\",\"b\":\"80807.90\",\"B\":\"13.570\",\"a\":\"80808.00\",\"A\":\"0.940\",\"T\":1793209980062,\"E\":1793209980062,\"st\":1}}",
+        "<sym>@depth20@100ms": "{\"stream\":\"btcusdt@depth20@100ms\",\"data\":{\"e\":\"depthUpdate\",\"E\":1793209980065,\"T\":1793209980064,\"s\":\"BTCUSDT\",\"ps\":\"BTCUSDT\",\"U\":11948980015778,\"u\":11948980029959,\"pu\":11948980015639,\"b\":[[\"80807.90\",\"13.570\"],[\"80807.80\",\"0.620\"],[\"80807.70\",\"0.927\"],[\"80807.60\",\"1.015\"],[\"80807.50\",\"1.153\"],[\"80807.40\",\"0.068\"],[\"80807.20\",\"0.002\"],[\"80807.10\",\"0.025\"],[\"80807.00\",\"0.001\"],[\"80806.90\",\"0.186\"],["
+      },
+      "errors": [],
+      "pingSent": 0,
+      "pongReceived": 0,
+      "elapsedWallMs": 12034
+    },
+    {
+      "name": "binance_futures_market(aggTrade+markPrice+forceOrder)",
+      "url": "wss://fstream.binance.com/market/stream?streams=btcusdt@aggTrade/btcusdt@markPrice@1s/btcusdt@forceOrder",
+      "ok": true,
+      "connected": true,
+      "subscribed": false,
+      "connectMs": 181,
+      "firstMsgMs": 221,
+      "durationMs": 12000,
+      "counts": {
+        "<sym>@markPrice@1s": 12,
+        "<sym>@aggTrade": 78
+      },
+      "total": 90,
+      "samples": {
+        "<sym>@markPrice@1s": "{\"stream\":\"btcusdt@markPrice@1s\",\"data\":{\"e\":\"markPriceUpdate\",\"E\":1793209992000,\"s\":\"BTCUSDT\",\"p\":\"80816.64940580\",\"ap\":\"80816.64940580\",\"P\":\"80674.37661118\",\"i\":\"80844.36478261\",\"r\":\"0.00010000\",\"T\":1793232000000,\"st\":1}}",
+        "<sym>@aggTrade": "{\"stream\":\"btcusdt@aggTrade\",\"data\":{\"e\":\"aggTrade\",\"E\":1793209992153,\"a\":3498890102,\"s\":\"BTCUSDT\",\"p\":\"80814.90\",\"q\":\"0.085\",\"nq\":\"0.085\",\"f\":8211554178,\"l\":8211554178,\"T\":1793209992003,\"m\":true,\"st\":1}}"
+      },
+      "errors": [],
+      "pingSent": 0,
+      "pongReceived": 0,
+      "elapsedWallMs": 12002
+    },
+    {
+      "name": "binance_spot_combined",
+      "url": "wss://stream.binance.com:9443/stream?streams=btcusdt@aggTrade/btcusdt@depth20@100ms/btcusdt@bookTicker",
+      "ok": true,
+      "connected": true,
+      "subscribed": false,
+      "connectMs": 179,
+      "firstMsgMs": 250,
+      "durationMs": 12000,
+      "counts": {
+        "<sym>@bookTicker": 803,
+        "<sym>@depth20@100ms": 117,
+        "<sym>@aggTrade": 79
+      },
+      "total": 999,
+      "samples": {
+        "<sym>@bookTicker": "{\"stream\":\"btcusdt@bookTicker\",\"data\":{\"u\":102002778336,\"s\":\"BTCUSDT\",\"b\":\"80851.67000000\",\"B\":\"7.63865000\",\"a\":\"80851.68000000\",\"A\":\"0.65994000\"}}",
+        "<sym>@depth20@100ms": "{\"stream\":\"btcusdt@depth20@100ms\",\"data\":{\"lastUpdateId\":102002778336,\"bids\":[[\"80851.67000000\",\"7.63865000\"],[\"80851.66000000\",\"0.00028000\"],[\"80851.65000000\",\"0.00007000\"],[\"80851.64000000\",\"0.00007000\"],[\"80851.63000000\",\"0.00007000\"],[\"80851.62000000\",\"0.00007000\"],[\"80851.61000000\",\"0.00007000\"],[\"80850.85000000\",\"0.00011000\"],[\"80850.84000000\",\"0.00400000\"],[\"80850.83000000\",\"0.00007000\"],[\"",
+        "<sym>@aggTrade": "{\"stream\":\"btcusdt@aggTrade\",\"data\":{\"e\":\"aggTrade\",\"E\":1793210004249,\"s\":\"BTCUSDT\",\"a\":4100336748,\"p\":\"80851.68000000\",\"q\":\"0.00129000\",\"f\":6798033047,\"l\":6798033047,\"T\":1793210004249,\"m\":false,\"M\":true}}"
+      },
+      "errors": [],
+      "pingSent": 0,
+      "pongReceived": 0,
+      "elapsedWallMs": 12002
+    },
+    {
+      "name": "okx_swap_public",
+      "url": "wss://ws.okx.com:8443/ws/v5/public",
+      "ok": false,
+      "connected": true,
+      "subscribed": false,
+      "connectMs": 189,
+      "firstMsgMs": 190,
+      "durationMs": 12000,
+      "counts": {
+        "event:notice": 1,
+        "ch:books": 117,
+        "ch:trades": 53
+      },
+      "total": 171,
+      "samples": {
+        "event:notice": "{\"event\":\"notice\",\"msg\":\"WebSocket port 8443 will be retired soon. Please migrate to port 443.\",\"code\":\"64010\",\"connId\":\"564b7318\"}",
+        "ch:books": "{\"event\":\"subscribe\",\"arg\":{\"channel\":\"books\",\"instId\":\"BTC-USDT-SWAP\"},\"connId\":\"564b7318\"}",
+        "ch:trades": "{\"event\":\"subscribe\",\"arg\":{\"channel\":\"trades\",\"instId\":\"BTC-USDT-SWAP\"},\"connId\":\"564b7318\"}"
+      },
+      "errors": [],
+      "pingSent": 0,
+      "pongReceived": 0,
+      "elapsedWallMs": 12001
+    }
+  ],
+  "rest": [
+    {
+      "name": "binance_futures_ping",
+      "url": "https://fapi.binance.com/fapi/v1/ping",
+      "ok": true,
+      "status": 200,
+      "ms": 90,
+      "sample": "{}",
+      "error": null
+    },
+    {
+      "name": "binance_futures_depth",
+      "url": "https://fapi.binance.com/fapi/v1/depth?symbol=BTCUSDT&limit=20",
+      "ok": false,
+      "status": 418,
+      "ms": 74,
+      "sample": "{\"code\":-1003,\"msg\":\"Way too many requests; IP(47.57.242.119) banned until 1793227138937. Please use the websocket for live updates to avoid bans.\"}",
+      "error": null
+    },
+    {
+      "name": "binance_spot_mirror_depth",
+      "url": "https://data-api.binance.vision/api/v3/depth?symbol=BTCUSDT&limit=20",
+      "ok": true,
+      "status": 200,
+      "ms": 281,
+      "sample": "{\"lastUpdateId\":102002783969,\"bids\":[[\"80858.75000000\",\"6.36715000\"],[\"80858.74000000\",\"0.00241000\"],[\"80858.73000000\",\"0.00007000\"],[\"80858.72000000\",\"0.00007000\"],[\"80858.71000000\",\"0.00007000\"],[\"80858.70000000\",\"0.00007000\"],[\"80858.69000000\",\"0.00007000\"],[\"80858.41000000\",\"0.01547000\"],[\"80858",
+      "error": null
+    },
+    {
+      "name": "okx_books",
+      "url": "https://www.okx.com/api/v5/market/books?instId=BTC-USDT-SWAP&sz=50",
+      "ok": true,
+      "status": 200,
+      "ms": 115,
+      "sample": "{\"code\":\"0\",\"msg\":\"\",\"data\":[{\"asks\":[[\"80834.9\",\"1057.06\",\"0\",\"59\"],[\"80835\",\"118.76\",\"0\",\"16\"],[\"80835.1\",\"0.62\",\"0\",\"1\"],[\"80835.2\",\"0.01\",\"0\",\"1\"],[\"80835.3\",\"0.71\",\"0\",\"5\"],[\"80835.4\",\"0.76\",\"0\",\"6\"],[\"80835.5\",\"0.67\",\"0\",\"4\"],[\"80835.6\",\"0.26\",\"0\",\"2\"],[\"80835.7\",\"0.65\",\"0\",\"4\"],[\"80835.8\",\"4.",
+      "error": null
+    }
+  ]
+}

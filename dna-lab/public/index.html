@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090d13">
+  <title>Market DNA · Canlı Laboratuvar</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">DNA</span>
+        <div class="brand-copy">
+          <h1>Market DNA</h1>
+          <span class="brand-sub">olay dizilimi araştırma ajanı</span>
+        </div>
+      </div>
+      <div class="top-right">
+        <div class="live-state" id="engineState" data-status="idle" role="status" aria-live="polite">
+          <i class="state-dot"></i><span id="engineStateLabel">BEKLEMEDE</span>
+        </div>
+      </div>
+    </header>
+
+    <main id="views">
+      <!-- PIYASA -->
+      <section class="view" id="view-market" data-view="market">
+        <div class="card market-card">
+          <div class="row-between">
+            <button class="pair-btn" id="coinBtn" aria-haspopup="listbox">
+              <span class="coin-badge" id="coinBadge">—</span>
+              <span class="pair-copy">
+                <b id="coinName">COİN SEÇ</b>
+                <small id="coinSub">analiz için coin seçin</small>
+              </span>
+              <svg class="caret" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="phase-chip" id="phaseChip">idle</div>
+          </div>
+
+          <div class="price-block">
+            <div>
+              <div class="eyebrow">SON FİYAT · USDT</div>
+              <div class="main-price" id="lastPrice">—</div>
+            </div>
+            <div class="mini-stats">
+              <div class="mini-stat"><span>SPREAD</span><b id="spreadVal">—</b></div>
+              <div class="mini-stat"><span>LAG (EWMA)</span><b id="lagVal">—</b></div>
+            </div>
+          </div>
+
+          <div class="venue-grid" id="venueGrid">
+            <div class="venue-empty">Kaynak bağlantıları coin seçilince başlar.</div>
+          </div>
+          <p class="note">Tüm göstergeler gerçek borsa mesajlarından hesaplanır; sahte veri üretilmez.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="kicker">MİKRO-YAPI</span><h2>Duvarlar ve akış</h2></div>
+          <div id="wallList" class="wall-list"><div class="empty-line">Veri bekleniyor…</div></div>
+        </div>
+      </section>
+
+      <!-- DNA -->
+      <section class="view hidden" id="view-dna" data-view="dna">
+        <div class="card dna-card">
+          <div class="card-head"><span class="kicker">ANA DNA KARTI</span><h2 id="dnaHeadline">Motor gözlemde</h2></div>
+          <div class="dna-status" id="dnaStatusWrap">
+            <span class="dna-status-chip" id="dnaStatusChip">GÖZLEMDE</span>
+            <span class="dna-status-sub" id="dnaStatusSub">motor durumunu bekliyor</span>
+          </div>
+          <div class="silence-box" id="silenceBox" hidden>
+            <b>Neden sessiz?</b>
+            <p id="silenceText"></p>
+          </div>
+          <div class="pred-box" id="predBox" hidden>
+            <div class="pred-head">
+              <span class="pred-motif" id="predMotif">—</span>
+              <span class="pred-shadow">GÖLGE TAHMİN · ARAŞTIRMA</span>
+            </div>
+            <div class="pred-grid" id="predGrid"></div>
+            <div class="pred-inval" id="predInvalidation"></div>
+            <p class="pred-note">Yalnızca MEZUN motif tahmin üretebilir. Olasılıklar t0 anında bilinen veriyle hesaplanır; işlem tavsiyesi değildir.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="kicker">OLAY ZİNCİRİ</span><h2>Son DNA olayları</h2></div>
+          <div class="chain-list" id="chainList"><div class="empty-line">Olay bekleniyor…</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="kicker">AKTİF EPIZODLAR</span><h2>Çözümlenmemiş tetiklemeler</h2></div>
+          <div class="ep-list" id="epList"><div class="empty-line">Epizod bekleniyor…</div></div>
+        </div>
+      </section>
+
+      <!-- LABORATUVAR -->
+      <section class="view hidden" id="view-lab" data-view="lab">
+        <div class="card">
+          <div class="card-head"><span class="kicker">MOTİF YAŞAM DÖNGÜSÜ</span><h2>Keşif → Kuluçka → Doğrulama</h2></div>
+          <div class="lifecycle-legend">
+            <span data-state="DISCOVERY">DISCOVERY</span><span data-state="INCUBATION">INCUBATION</span><span data-state="VALIDATION">VALIDATION</span><span data-state="GRADUATED">GRADUATED</span><span data-state="QUARANTINED">QUARANTINED</span><span data-state="RETIRED">RETIRED</span>
+          </div>
+          <div class="motif-list" id="motifList"><div class="empty-line">Motif yok — sistem gözlemde.</div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="kicker">BAZ MODELLER</span><h2>Kim kazanıyor? (ileri veriyle)</h2></div>
+          <div class="base-grid" id="baseGrid"><div class="empty-line">Henüz skorlama verisi yok.</div></div>
+          <p class="note">Kazanan önceden ilan edilmez; Brier skorları yalnızca çözülmüş ileri episodlardan hesaplanır.</p>
+        </div>
+      </section>
+
+      <!-- HAFIZA -->
+      <section class="view hidden" id="view-memory" data-view="memory">
+        <div class="card">
+          <div class="card-head"><span class="kicker">COİN HAFIZASI</span><h2 id="memoryTitle">Kalıcı öğrenme</h2></div>
+          <div class="mem-grid" id="memGrid"><div class="empty-line">Oturum açılınca hafıza durumu görünür.</div></div>
+          <div class="mem-files" id="memFiles"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="kicker">DOĞRULAMA KAYDI</span><h2>Mezuniyet değerlendirme günlüğü</h2></div>
+          <div class="eval-log" id="evalLog"><div class="empty-line">Değerlendirme kaydı yok.</div></div>
+        </div>
+      </section>
+
+      <!-- AYARLAR -->
+      <section class="view hidden" id="view-settings" data-view="settings">
+        <div class="card">
+          <div class="card-head"><span class="kicker">COİN SEÇİMİ</span><h2>Tek coin aktif analiz</h2></div>
+          <div class="coin-choices" id="coinChoices"></div>
+          <div class="custom-coin">
+            <input id="customCoin" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="veya sembol yaz: örn. SOLUSDT">
+            <button id="customCoinBtn" type="button">SEÇ</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="kicker">ARKA PLAN KULUÇKA</span><h2>Seçili coini izlemeye devam et</h2></div>
+          <button class="toggle" id="bgToggle" type="button" aria-pressed="false">
+            <span class="toggle-track"><i class="toggle-thumb"></i></span>
+            <span class="toggle-text">
+              <b id="bgLabel">KAPALI</b>
+              <small>Açık: sunucu tarayıcı kapalıyken de tek coini izler. Kapalı: tüm istemciler koparsa oturum duraklatılır ve hafıza diske yazılır.</small>
+            </span>
+          </button>
+          <p class="note">Tarayıcının kapanışı kesin algılanamaz; oturum sonlandırma bağlantı zaman aşımı ve açık talebe dayanır.</p>
+          <button class="danger-btn" id="endSessionBtn" type="button">OTURUMU SONLANDIR</button>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="kicker">VERİ KAYNAKLARI</span><h2>Canlı bağlantı durumu</h2></div>
+          <div class="src-list" id="srcList"><div class="empty-line">—</div></div>
+          <p class="note">Bağlantı kanıtları: <a href="/api/audit" target="_blank" rel="noopener">/api/audit</a> — gerçek mesaj sayıları ve test raporları.</p>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Ana gezinme">
+      <button class="nav-item active" data-tab="market" aria-selected="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19h18M5 16l4-5 3 2 5-7 4 3"/></svg><span>Piyasa</span>
+      </button>
+      <button class="nav-item" data-tab="dna" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3c0 4 8 5 8 9s-8 5-8 9M16 3c0 4-8 5-8 9s8 5 8 9"/></svg><span>DNA</span>
+      </button>
+      <button class="nav-item" data-tab="lab" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg><span>Laboratuvar</span>
+      </button>
+      <button class="nav-item" data-tab="memory" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg><span>Hafıza</span>
+      </button>
+      <button class="nav-item" data-tab="settings" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z"/></svg><span>Ayarlar</span>
+      </button>
+    </nav>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

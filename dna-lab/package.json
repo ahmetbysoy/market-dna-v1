@@ -1,0 +1,17 @@
+{
+  "name": "market-dna-v1",
+  "version": "1.0.0",
+  "description": "Market DNA — gerçek zamanlı olay dizilimi keşfeden ve istatistiksel olarak öğrenen piyasa mikro-yapısı analiz ajanı (zero-dependency Node.js)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test:unit": "node scripts/unit-tests.js",
+    "test:connectivity": "node scripts/test-connectivity.js",
+    "audit:live": "node scripts/live-audit.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {},
+  "license": "MIT"
+}

@@ -1,0 +1,141 @@
+{
+  "ts": "2026-10-28T17:54:21.035Z",
+  "symbol": "ETHUSDT",
+  "durationPerWssSec": 8,
+  "wss": [
+    {
+      "name": "binance_futures_public(bookTicker+depth20)",
+      "url": "wss://fstream.binance.com/public/stream?streams=ethusdt@bookTicker/ethusdt@depth20@100ms",
+      "ok": true,
+      "connected": true,
+      "subscribed": false,
+      "connectMs": 223,
+      "firstMsgMs": 257,
+      "durationMs": 8000,
+      "counts": {
+        "<sym>@depth20@100ms": 76,
+        "<sym>@bookTicker": 4763
+      },
+      "total": 4839,
+      "samples": {
+        "<sym>@depth20@100ms": "{\"stream\":\"ethusdt@depth20@100ms\",\"data\":{\"e\":\"depthUpdate\",\"E\":1793210028693,\"T\":1793210028692,\"s\":\"ETHUSDT\",\"ps\":\"ETHUSDT\",\"U\":11948984870107,\"u\":11948984876134,\"pu\":11948984869621,\"b\":[[\"2346.43\",\"151.086\"],[\"2346.42\",\"10.019\"],[\"2346.41\",\"4.051\"],[\"2346.40\",\"0.009\"],[\"2346.39\",\"0.551\"],[\"2346.38\",\"7.031\"],[\"2346.37\",\"5.791\"],[\"2346.36\",\"0.020\"],[\"2346.35\",\"16.023\"],[\"2346.33\",\"1.052\"],[\"2346.3",
+        "<sym>@bookTicker": "{\"stream\":\"ethusdt@bookTicker\",\"data\":{\"e\":\"bookTicker\",\"u\":11948984878729,\"s\":\"ETHUSDT\",\"ps\":\"ETHUSDT\",\"b\":\"2346.43\",\"B\":\"151.056\",\"a\":\"2346.44\",\"A\":\"27.191\",\"T\":1793210028744,\"E\":1793210028745,\"st\":1}}"
+      },
+      "errors": [],
+      "pingSent": 0,
+      "pongReceived": 0,
+      "elapsedWallMs": 8035
+    },
+    {
+      "name": "binance_futures_market(aggTrade+markPrice+forceOrder)",
+      "url": "wss://fstream.binance.com/market/stream?streams=ethusdt@aggTrade/ethusdt@markPrice@1s/ethusdt@forceOrder",
+      "ok": true,
+      "connected": true,
+      "subscribed": false,
+      "connectMs": 180,
+      "firstMsgMs": 285,
+      "durationMs": 8000,
+      "counts": {
+        "<sym>@aggTrade": 168,
+        "<sym>@markPrice@1s": 8
+      },
+      "total": 176,
+      "samples": {
+        "<sym>@aggTrade": "{\"stream\":\"ethusdt@aggTrade\",\"data\":{\"e\":\"aggTrade\",\"E\":1793210036758,\"a\":3132074868,\"s\":\"ETHUSDT\",\"p\":\"2346.96\",\"q\":\"0.032\",\"nq\":\"0.032\",\"f\":8905604761,\"l\":8905604763,\"T\":1793210036608,\"m\":true,\"st\":1}}",
+        "<sym>@markPrice@1s": "{\"stream\":\"ethusdt@markPrice@1s\",\"data\":{\"e\":\"markPriceUpdate\",\"E\":1793210037000,\"s\":\"ETHUSDT\",\"p\":\"2346.96000000\",\"ap\":\"2346.96000000\",\"P\":\"2338.86198946\",\"i\":\"2347.60093023\",\"r\":\"0.00009616\",\"T\":1793232000000,\"st\":1}}"
+      },
+      "errors": [],
+      "pingSent": 0,
+      "pongReceived": 0,
+      "elapsedWallMs": 8001
+    },
+    {
+      "name": "binance_spot_combined",
+      "url": "wss://stream.binance.com:9443/stream?streams=ethusdt@aggTrade/ethusdt@depth20@100ms/ethusdt@bookTicker",
+      "ok": true,
+      "connected": true,
+      "subscribed": false,
+      "connectMs": 180,
+      "firstMsgMs": 236,
+      "durationMs": 8000,
+      "counts": {
+        "<sym>@bookTicker": 318,
+        "<sym>@depth20@100ms": 76,
+        "<sym>@aggTrade": 9
+      },
+      "total": 403,
+      "samples": {
+        "<sym>@bookTicker": "{\"stream\":\"ethusdt@bookTicker\",\"data\":{\"u\":82581580427,\"s\":\"ETHUSDT\",\"b\":\"2347.22000000\",\"B\":\"78.95050000\",\"a\":\"2347.23000000\",\"A\":\"10.05010000\"}}",
+        "<sym>@depth20@100ms": "{\"stream\":\"ethusdt@depth20@100ms\",\"data\":{\"lastUpdateId\":82581580438,\"bids\":[[\"2347.22000000\",\"81.50750000\"],[\"2347.21000000\",\"0.00230000\"],[\"2347.20000000\",\"0.65910000\"],[\"2347.19000000\",\"12.65110000\"],[\"2347.18000000\",\"16.30970000\"],[\"2347.16000000\",\"0.20000000\"],[\"2347.13000000\",\"0.16540000\"],[\"2347.11000000\",\"0.00450000\"],[\"2347.10000000\",\"18.56850000\"],[\"2347.09000000\",\"0.28020000\"],[\"2347.08",
+        "<sym>@aggTrade": "{\"stream\":\"ethusdt@aggTrade\",\"data\":{\"e\":\"aggTrade\",\"E\":1793210045072,\"s\":\"ETHUSDT\",\"a\":2109119054,\"p\":\"2347.22000000\",\"q\":\"0.00600000\",\"f\":4472470374,\"l\":4472470374,\"T\":1793210045072,\"m\":true,\"M\":true}}"
+      },
+      "errors": [],
+      "pingSent": 0,
+      "pongReceived": 0,
+      "elapsedWallMs": 8001
+    },
+    {
+      "name": "okx_swap_public",
+      "url": "wss://ws.okx.com:8443/ws/v5/public",
+      "ok": false,
+      "connected": true,
+      "subscribed": false,
+      "connectMs": 193,
+      "firstMsgMs": 193,
+      "durationMs": 8000,
+      "counts": {
+        "event:notice": 1,
+        "ch:books": 77,
+        "ch:trades": 118
+      },
+      "total": 196,
+      "samples": {
+        "event:notice": "{\"event\":\"notice\",\"msg\":\"WebSocket port 8443 will be retired soon. Please migrate to port 443.\",\"code\":\"64010\",\"connId\":\"65150b70\"}",
+        "ch:books": "{\"event\":\"subscribe\",\"arg\":{\"channel\":\"books\",\"instId\":\"ETH-USDT-SWAP\"},\"connId\":\"65150b70\"}",
+        "ch:trades": "{\"event\":\"subscribe\",\"arg\":{\"channel\":\"trades\",\"instId\":\"ETH-USDT-SWAP\"},\"connId\":\"65150b70\"}"
+      },
+      "errors": [],
+      "pingSent": 0,
+      "pongReceived": 0,
+      "elapsedWallMs": 8003
+    }
+  ],
+  "rest": [
+    {
+      "name": "binance_futures_ping",
+      "url": "https://fapi.binance.com/fapi/v1/ping",
+      "ok": true,
+      "status": 200,
+      "ms": 85,
+      "sample": "{}",
+      "error": null
+    },
+    {
+      "name": "binance_futures_depth",
+      "url": "https://fapi.binance.com/fapi/v1/depth?symbol=ETHUSDT&limit=20",
+      "ok": true,
+      "status": 200,
+      "ms": 77,
+      "sample": "{\"lastUpdateId\":11948988414211,\"E\":1793210060635,\"T\":1793210060633,\"bids\":[[\"2346.00\",\"201.311\"],[\"2345.99\",\"0.361\"],[\"2345.98\",\"5.221\"],[\"2345.97\",\"1.664\"],[\"2345.96\",\"0.045\"],[\"2345.95\",\"0.019\"],[\"2345.94\",\"2.171\"],[\"2345.92\",\"0.027\"],[\"2345.91\",\"0.639\"],[\"2345.90\",\"0.041\"],[\"2345.89\",\"0.019\"],[\"2",
+      "error": null
+    },
+    {
+      "name": "binance_spot_mirror_depth",
+      "url": "https://data-api.binance.vision/api/v3/depth?symbol=ETHUSDT&limit=20",
+      "ok": true,
+      "status": 200,
+      "ms": 237,
+      "sample": "{\"lastUpdateId\":82581583927,\"bids\":[[\"2347.04000000\",\"10.53410000\"],[\"2347.03000000\",\"0.00660000\"],[\"2346.96000000\",\"0.00220000\"],[\"2346.95000000\",\"0.00230000\"],[\"2346.94000000\",\"0.16190000\"],[\"2346.93000000\",\"0.00220000\"],[\"2346.92000000\",\"0.00220000\"],[\"2346.90000000\",\"0.00450000\"],[\"2346.89000000",
+      "error": null
+    },
+    {
+      "name": "okx_books",
+      "url": "https://www.okx.com/api/v5/market/books?instId=ETH-USDT-SWAP&sz=50",
+      "ok": true,
+      "status": 200,
+      "ms": 126,
+      "sample": "{\"code\":\"0\",\"msg\":\"\",\"data\":[{\"asks\":[[\"2345.87\",\"3730.54\",\"0\",\"45\"],[\"2345.88\",\"116.26\",\"0\",\"2\"],[\"2345.89\",\"17.31\",\"0\",\"2\"],[\"2345.9\",\"20.41\",\"0\",\"1\"],[\"2345.92\",\"0.01\",\"0\",\"1\"],[\"2345.93\",\"0.01\",\"0\",\"1\"],[\"2345.94\",\"0.03\",\"0\",\"3\"],[\"2345.95\",\"20.43\",\"0\",\"3\"],[\"2345.96\",\"15.91\",\"0\",\"5\"],[\"2345.97\"",
+      "error": null
+    }
+  ]
+}
