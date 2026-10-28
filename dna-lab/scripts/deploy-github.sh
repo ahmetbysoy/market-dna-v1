@@ -11,11 +11,14 @@
 # ============================================================================
 set -euo pipefail
 
-REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-REPO_NAME="${2:-market-dna-v1}"
-VISIBILITY="${3:-private}"
-case "${1:-${GITHUB_TOKEN:-}}" in ghp_*|github_pat_*|gho_*|"") TOKEN="${1:-${GITHUB_TOKEN:-}}";; *) echo "HATA: 1. argüman bir GitHub PAT olmalı (ghp_/github_pat_ ile başlar)"; exit 1;; esac
+REPO_DIR="$(git -C "$(cd "$(dirname "$0")" && pwd)" rev-parse --show-toplevel 2>/dev/null || cd "$(dirname "$0")/.." && pwd)"
+# Token öncelik sırası: GITHUB_TOKEN env → $1 (token formatlıysa, sonra shift edilir)
+TOKEN="${GITHUB_TOKEN:-}"
+if [ -z "$TOKEN" ] && [[ "${1:-}" =~ ^(ghp_|github_pat_|gho_) ]]; then TOKEN="$1"; shift; fi
+REPO_NAME="${1:-market-dna-v1}"
+VISIBILITY="${2:-private}"
 [ -n "$TOKEN" ] || { echo "HATA: GITHUB_TOKEN verilmedi. Kullanım: GITHUB_TOKEN=ghp_xxx $0 [repo-adı] [public|private]"; exit 1; }
+case "$TOKEN" in ghp_*|github_pat_*|gho_*) :;; *) echo "HATA: token geçersiz formatta (ghp_/github_pat_ ile başlamalı)"; exit 1;; esac
 [ "$VISIBILITY" = "public" ] || [ "$VISIBILITY" = "private" ] || { echo "HATA: görünürlük 'public' veya 'private' olmalı"; exit 1; }
 
 API="https://api.github.com"
