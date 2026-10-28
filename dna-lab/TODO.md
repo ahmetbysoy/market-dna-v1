@@ -105,11 +105,13 @@
 | 6 | DONE | tarayıcı doğrulaması (5 sekme, 0 konsol hatası) + SSE kanıt |
 | 7 | DONE | audit/live/liveaudit-*.md (uçtan uca gerçek kanıt) |
 
-## FAZ 8 — GitHub Dağıtımı — **BLOCKED (dış bağımlılık: kimlik bilgisi)**
+## FAZ 8 — GitHub Dağıtımı — **DONE**
 
-- [x] Yerel depo dağıtıma hazır — main branch, 3 commit, 55 dosya izlemeli; çalışma ağacı temiz (commit `7408368` sonrası).
+- [x] Yerel depo dağıtıma hazır — main branch, çalışma ağacı temiz.
 - [x] `.env` VCS'ten çıkarıldı + `.gitignore` genişletildi (`.env`, `upload/`, `db/`, `*.log`) — sır sızıntısı riski kapatıldı.
-- [x] `scripts/deploy-github.sh` — tek komut dağıtım: token doğrulama → repo oluşturma (422=zaten var, idempotent) → remote → push → API ile push doğrulama; token maskelenir, git config'e KAYDEDİLMEZ.
-- [x] Ağ doğrulaması — github.com erişilebilir (HTTP/2 200, 2026-10-28); api.github.com anonim istekte rate-limit'li (authenticated istekte sorun beklenmiyor).
-- [ ] **BLOCKED:** Bu ortamda GitHub kimlik bilgisi YOK (env / gh CLI / credential helper / config taramasıyla kanıtlandı — hiçbiri token içermiyor). GitHub push, geçerli bir Personal Access Token (kapsam: `repo` veya Fine-grained `Contents: read & write`) olmadan imkânsızdır ve bu kanıt disiplinine aykırı biçimde SAHTE bir repo URL'si bildirilmesi reddedilmiştir.
-- [ ] Token sağlandığında: `GITHUB_TOKEN=ghp_xxx dna-lab/scripts/deploy-github.sh market-dna-v1 private` → TODO.md bu madde DONE olarak güncellenir.
+- [x] `scripts/deploy-github.sh` — tek komut dağıtım: token doğrulama → repo oluşturma (422=zaten var, idempotent) → remote → push → API ile push doğrulama; token maskelenir, git config'e KAYDEDİLMEZ. İki gerçek hata bulup düzeltildi: (1) env-var kullanım biçiminde argüman ayrıştırma hatası, (2) REPO_DIR repo kökü yerine alt dizini gösteriyordu.
+- [x] Ağ doğrulaması — github.com erişilebilir (HTTP/2 200, 2026-10-28).
+- [x] **GERÇEK DAĞITIM (2026-10-28):** `ahmetbysoy/market-dna-v1` **public** oluşturuldu; `main -> main` push edildi; API üzerinden commit listesiyle birebir doğrulandı (yerel HEAD = uzak HEAD). Kullanıcı sağladığı PAT ile deploy-github.sh çalıştırdı.
+- [x] Push sonrası doğrulama — `git show HEAD:dna-lab/scripts/deploy-github.sh` ile GitHub'daki sürüm kontrol edildi; düzeltme öncesi eski sürüm olduğu kanıtlandı, fix commit'i (`db6f4ef`) sonrası nihai push yapıldı.
+- Bilinen uyarı (belgelendi, MÜDAHALE EDİLMEDİ): geçmişteki 75–94 MB'lık `episodes-*.jsonl` sürümleri GH001 large-file uyarısı üretti (GitHub 50 MB öneri / 100 MB sert limit). Kanıt disiplini gereği geçmiş yeniden yazılmadı ve test kayıtları SİLİNMEDİ. Yeni oturum JSONL'leri rotasyonla günlük dosyalara yazdığından ileride tek dosya boyutu büyümeye devam edebilir — izleme maddesi aşağıda.
+- [ ] İzleme: `data/memory/<COIN>/episodes-<gün>.jsonl` günlük dosya boyutu 100 MB'ı yaklaşınca arşiv/sıkıştırma stratejisi gerekir (V2 işi; mevcut oturum için acil değil).
